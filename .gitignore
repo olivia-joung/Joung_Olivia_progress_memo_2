@@ -33,6 +33,7 @@
 # ignore crossword datasets
 data/clues.tsv
 data/puzzles.tsv
+data/similar.tsv
 
 # ignore files (likely datasets or graphics) if too large (> 100 MB)
 # specify pathway to dataset data/project_dataset.csv

@@ -38,4 +38,5 @@ library(naniar)
 ```{r}
 clues <- read_tsv("data/clues.tsv")
 puzzles <- read_tsv("data/puzzles.tsv")
+select <- read_tsv("data/similar.tsv")
 ```
