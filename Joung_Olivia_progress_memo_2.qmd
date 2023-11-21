@@ -19,3 +19,23 @@ execute:
 from: markdown+emoji 
 
 ---
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/olivia-joung/Joung_Olivia_progress_memo_2.git](https://github.com/olivia-joung/Joung_Olivia_progress_memo_2.git)
+
+:::
+
+## Load packages
+```{r}
+library(tidyverse)
+library(janitor)
+library(naniar)
+```
+
+## Data source
+```{r}
+clues <- read_tsv("data/clues.tsv")
+puzzles <- read_tsv("data/puzzles.tsv")
+```
