@@ -35,6 +35,7 @@ data/clues.tsv
 data/puzzles.tsv
 data/similar.tsv
 data/stats.tsv
+data/english Dictionary.csv
 
 # ignore files (likely datasets or graphics) if too large (> 100 MB)
 # specify pathway to dataset data/project_dataset.csv
