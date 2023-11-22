@@ -2,12 +2,14 @@
 library(tidyverse)
 library(janitor)
 library(naniar)
+library(magick)
 
 ## Load data
 clues <- read_tsv("data/clues.tsv")
 puzzles <- read_tsv("data/puzzles.tsv")
 similar <- read_tsv("data/similar.tsv")
 stats <- read_tsv("data/stats.tsv")
+dictionary <- read_csv("data/english dictionary.csv")
 
 ## Data Cleaning
 
@@ -71,7 +73,7 @@ puzzles_joined <- puzzles_edited |>
 ## EDA
 
 # how many puzzles per year? - data will be skewed
-puzzles_joined |> 
+puzzles_number_plot <- puzzles_joined |> 
   mutate(
     year = as.integer(str_remove_all(pubid_year, "[a-zA-Z]+"))
   ) |> 
@@ -84,10 +86,81 @@ puzzles_joined |>
   geom_density() +
   labs(
     title = "Proportion of Puzzles by Year",
-    x = "Year"
+    x = "Year",
+    y = "Density"
   )
+
+ggsave(filename = "plots/puzzles_number_plot.png", plot = puzzles_number_plot)
   
-# most common clue by year?
+# most common clue?
+common_clues <- clues_joined |> 
+  mutate(
+    answer = as_factor(answer)
+  ) |> 
+  group_by(answer) |> 
+  summarize(
+    n = n()
+  ) |> 
+  arrange(desc(n)) |> 
+  slice_max(n, n = 10)
+
+common_clues_table <- knitr::kable(common_clues, format = "html") |>
+  kable_styling() |>
+  save_kable("plots/common_clues_table.png")
+
+# three-letter/four-letter combos
+three_letter <- clues_joined |> 
+  filter(str_length(answer) == 3) |>
+  mutate(
+    answer = as_factor(answer)
+  ) |>
+  group_by(answer) |> 
+  summarize(
+    n = n()
+  ) |> 
+  arrange(desc(n)) |> 
+  slice_max(n, n = 10)
+
+three_letter_table <- knitr::kable(three_letter, format = "html") |>
+  kable_styling() |>
+  save_kable("plots/three_letter_table.png")
+
+four_letter <- clues_joined |> 
+  filter(str_length(answer) == 4) |>
+  mutate(
+    answer = as_factor(answer)
+  ) |>
+  group_by(answer) |> 
+  summarize(
+    n = n()
+  ) |> 
+  arrange(desc(n)) |> 
+  slice_max(n, n = 10)
+
+four_letter_table <- knitr::kable(four_letter, format = "html") |>
+  kable_styling() |>
+  save_kable("plots/four_letter_table.png")
+
+# dictionary stuff
+dictionary_edited <- dictionary |> 
+  filter(!is.na(pos)) |> 
+  mutate(
+    answer = as_factor(toupper(word))
+  ) 
+
+# only proper nouns
+clues_joined_edited <- clues_joined |> 
+  left_join(dictionary_edited |> select(answer, pos), 
+            join_by(answer), 
+            relationship = "many-to-many") 
+
+clues_joined_edited |> 
+  filter(is.na(pos))
+
+
+
+
+
 
 
 

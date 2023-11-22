@@ -32,6 +32,7 @@ from: markdown+emoji
 library(tidyverse)
 library(janitor)
 library(naniar)
+library(magick)
 ```
 
 ## Data source
@@ -39,4 +40,41 @@ library(naniar)
 clues <- read_tsv("data/clues.tsv")
 puzzles <- read_tsv("data/puzzles.tsv")
 similar <- read_tsv("data/similar.tsv")
+stats <- read_tsv("data/stats.tsv")
+dictionary <- read_csv("data/english dictionary.csv")
 ```
+Since last memo: 
+
+- Added `stats`, which gives number of crosswords by day of the week, year, and publication
+- Added `dictionary`, csv file with all words in English dictionary, as well as their word type (e.g. adj., n., etc.)
+
+## Research Questions
+
+- Most common words? Most common letter permutations?
+- Most common types of words?
+- Frequency of proper nouns? Types of proper nouns?
+- Potential obstacles in data?
+- How clues/answers change (in difficulty) throughout the week?
+
+## Looking into Data
+
+![](plots/puzzles_number_plot.png)
+There are some potential issues here. As seen in the data above, there are significantly more data points (puzzles) in the data set between the approximate years of 1960-2000 than during any other time period. There are especially less toward the beginning of the time range, from 1913-1950. Therefore, data will be skewed toward the trends of more modern/recent puzzles.
+
+## Preliminary EDA
+
+All data has been cleaned/joined, as shown in R Script. Main data sets used will be `clues_joined` and `puzzles_joined`, which are `clues` and `puzzles` each respectively joined with the `stats` data set. Later, `clues_joined` will also be joined with the `dictionary` data set in order to explore the types of words used for crosswords. I may also plan to read in other data sets that list every known location in the world, every celebrity name, etc. in order to further explore the proper nouns used in crosswords.
+
+Top 10 most common words:
+![](plots/common_clues_table.png)
+Top 10 most common three-letter and four-letter words:
+![](plots/three_letter_table.png)
+![](plots/four_letter_table.png)
+
+
+
+
+
+
+
+
