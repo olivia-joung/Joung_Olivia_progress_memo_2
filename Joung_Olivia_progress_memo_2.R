@@ -154,18 +154,74 @@ clues_joined_edited <- clues_joined |>
             join_by(answer), 
             relationship = "many-to-many") 
 
-clues_joined_edited |> 
-  filter(is.na(pos))
+proper_noun <- clues_joined_edited |> 
+  filter(is.na(pos)) |>
+  mutate(
+    answer = as_factor(answer)
+  ) |>
+  group_by(answer) |> 
+  summarize(
+    n = n()
+  ) |> 
+  arrange(desc(n)) |> 
+  slice_max(n, n = 10)
+  
+proper_noun_table <- knitr::kable(proper_noun, format = "html") |>
+  kable_styling() |>
+  save_kable("plots/proper_noun_table.png")
 
+# length of words across the years
+avg_letter_count_plot <- clues_joined |> 
+  mutate(
+    letter_count = str_count(answer, "[a-zA-Z]")
+  ) |> 
+  group_by(year) |> 
+  mutate(
+    letter_count_average = mean(letter_count)
+  ) |> 
+  select(year, letter_count_average) |> 
+  distinct(year, .keep_all = TRUE) |> 
+  ggplot(aes(year, letter_count_average)) +
+  geom_jitter() + 
+  ylim(4.8, 5.5) +
+  labs(
+    title = "Average Length of Words Over the Years",
+    x = "Year",
+    y = "Average Letter Count"
+  )
+  
+ggsave(filename = "plots/avg_letter_count_plot.png", 
+       plot = avg_letter_count_plot)
 
+# length of words across the week
 
+clues_joined_edited <- clues_joined |> 
+  mutate(
+    letter_count = str_count(answer, "[a-zA-Z]")
+  ) |> 
+  group_by(weekday) |>
+  mutate(
+    letter_count_average = mean(letter_count),
+    weekday = as_factor(weekday),
+  ) |>
+  select(weekday, letter_count_average) |> 
+  distinct(weekday, .keep_all = TRUE)
+  
+avg_letter_count_week_plot <- clues_joined_edited |> 
+  mutate(
+    weekday = fct_relevel(weekday, c("Sun", "Mon", "Tue", "Wed",
+                                 "Thu", "Fri", "Sat"))
+  ) |> 
+  ggplot(aes(weekday, letter_count_average)) + 
+  geom_point() +
+  labs(
+    title = "Average Length of Words Over the Week",
+    x = "Weekday",
+    y = "Average Letter Count"
+  )
 
-
-
-
-
-
-
+ggsave(filename = "plots/avg_letter_count_week_plot.png", 
+       plot = avg_letter_count_week_plot)
 
 
 

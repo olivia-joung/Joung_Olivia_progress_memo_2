@@ -19,6 +19,7 @@ execute:
 from: markdown+emoji 
 
 ---
+
 ::: {.callout-tip icon=false}
 
 ## Github Repo Link
@@ -28,6 +29,7 @@ from: markdown+emoji
 :::
 
 ## Load packages
+
 ```{r}
 library(tidyverse)
 library(janitor)
@@ -35,7 +37,9 @@ library(naniar)
 library(magick)
 ```
 
+
 ## Data source
+
 ```{r}
 clues <- read_tsv("data/clues.tsv")
 puzzles <- read_tsv("data/puzzles.tsv")
@@ -43,6 +47,7 @@ similar <- read_tsv("data/similar.tsv")
 stats <- read_tsv("data/stats.tsv")
 dictionary <- read_csv("data/english dictionary.csv")
 ```
+
 Since the last memo, I have added `stats`, which gives number of crosswords by day of the week, year, and publication. I have also added `dictionary`, csv file with all words in English dictionary, as well as their word type (e.g. adj., n., etc.)
 
 ## Research Questions
@@ -88,5 +93,6 @@ The following two plots analyze the average word length over the years, as well 
 ![](plots/avg_letter_count_plot.png)
 ![](plots/avg_letter_count_week_plot.png)
 From here, I plan on taking a closer look at how the change in difficulty from Monday to Sunday can be quantified (beyond just the increase in word length). To do this, I could also look at how common the words that show up in Monday puzzles are compared to the ones in the Sunday puzzles (presumably the words in Sunday will be less common, and thus harder to solve). Of these words, I also plan on taking a closer look at which of those are proper nouns and/or do not have dictionary definitions—and specifically how widely-known and/or obscure and esoteric those words may be depending on the day. 
+
 
 
